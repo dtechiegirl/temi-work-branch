@@ -30,7 +30,27 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'type' => 'required|string',
+            'email' => 'required|email|unique:customers,email',
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'state' => 'required|string',
+            'postal_code' => 'required|string',
+        ]);
+
+        $customer = new Customer;
+        $customer->name = $validatedData['name'];
+        $customer->type = $validatedData['type'];
+        $customer->email = $validatedData['email'];
+        $customer->address = $validatedData['address'];
+        $customer->city = $validatedData['city'];
+        $customer->state = $validatedData['state'];
+        $customer->postal_code = $validatedData['postal_code'];
+        $customer->save();
+
+        return response()->json(['message' => 'Customer created successfully'], 201);
     }
 
     /**
